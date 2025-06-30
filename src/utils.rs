@@ -28,7 +28,7 @@ pub fn parse_secret_key(secret_str: &str) -> Result<Keypair, String> {
     }
     
     // Try to create a keypair from the bytes
-    Keypair::from_bytes(&secret_bytes).map_err(|err| {
+    Keypair::try_from(&secret_bytes[..]).map_err(|err| {
         format!("Failed to create keypair from secret key: {}", err)
     })
 }
