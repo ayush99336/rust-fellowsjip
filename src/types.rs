@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct ApiResponse<T> {
     pub success: bool,
     pub data: Option<T>,

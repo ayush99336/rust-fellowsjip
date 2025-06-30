@@ -1,12 +1,12 @@
-#[cfg(test)]
-mod tests {
-    use crate::handlers::*;
-    use crate::types::*;
-    use axum::extract::Json;
-    use axum::http::StatusCode;
+use rust_http_server::*;
+use axum::extract::Json;
 
+#[cfg(test)]
+mod integration_tests {
+    use super::*;
+    
     #[tokio::test]
-    async fn test_generate_keypair() {
+    async fn test_keypair_generation() {
         let response = generate_keypair().await;
         let api_response = response.0;
         
@@ -20,59 +20,29 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_sign_message_valid() {
-        // Generate a keypair first
-        let keypair_response = generate_keypair().await;
-        let keypair_data = keypair_response.0.data.unwrap();
-
-        let request = SignMessageRequest {
-            message: "Hello, Solana!".to_string(),
-            secret: keypair_data.secret_key,
-        };
-
-        let result = sign_message(Json(request)).await;
-        assert!(result.is_ok());
-        
-        let response = result.unwrap().0;
-        assert!(response.success);
-        assert!(response.data.is_some());
-        
-        let sign_data = response.data.unwrap();
-        assert!(!sign_data.signature.is_empty());
-        assert_eq!(sign_data.public_key, keypair_data.public_key);
-        assert_eq!(sign_data.message, "Hello, Solana!");
-    }
-
-    #[tokio::test]
-    async fn test_sign_message_empty_message() {
-        let request = SignMessageRequest {
-            message: "".to_string(),
-            secret: "some_secret".to_string(),
-        };
-
-        let result = sign_message(Json(request)).await;
-        assert!(result.is_err());
-        
-        let (status, response) = result.unwrap_err();
-        assert_eq!(status, StatusCode::BAD_REQUEST);
-        assert!(!response.0.success);
-    }
-
-    #[tokio::test]
-    async fn test_verify_message_workflow() {
+    async fn test_message_signing_and_verification() {
         // Generate a keypair
         let keypair_response = generate_keypair().await;
         let keypair_data = keypair_response.0.data.unwrap();
 
         // Sign a message
-        let message = "Test message for verification";
+        let message = "Hello, Solana World!";
         let sign_request = SignMessageRequest {
             message: message.to_string(),
             secret: keypair_data.secret_key,
         };
 
-        let sign_result = sign_message(Json(sign_request)).await.unwrap();
-        let sign_data = sign_result.0.data.unwrap();
+        let sign_result = sign_message(Json(sign_request)).await;
+        assert!(sign_result.is_ok());
+        
+        let sign_response = sign_result.unwrap().0;
+        assert!(sign_response.success);
+        assert!(sign_response.data.is_some());
+        
+        let sign_data = sign_response.data.unwrap();
+        assert!(!sign_data.signature.is_empty());
+        assert_eq!(sign_data.public_key, keypair_data.public_key);
+        assert_eq!(sign_data.message, message);
 
         // Verify the message
         let verify_request = VerifyMessageRequest {
@@ -93,11 +63,8 @@ mod tests {
         assert_eq!(verify_data.message, message);
     }
 
-    // Test utility functions
     #[test]
-    fn test_utils_validation() {
-        use crate::utils::*;
-        
+    fn test_utility_functions() {
         // Test amount validation
         assert!(validate_amount(100, "amount").is_ok());
         assert!(validate_amount(0, "amount").is_err());

@@ -2,21 +2,10 @@ mod handlers;
 mod types;
 mod utils;
 
-#[cfg(test)]
-mod tests;
-
 use axum::{routing::post, Router};
 use handlers::{generate_keypair, create_token, mint_token, sign_message, verify_message, send_sol, send_token};
 
-/// A Solana HTTP Server built with Rust
-/// 
-/// This server provides endpoints for interacting with Solana blockchain:
-/// - Generate keypairs
-/// - Create SPL token instructions
-/// - Sign and verify messages
-/// - Create transfer instructions
-///
-/// All endpoints return JSON responses with a consistent format.
+
 #[tokio::main]
 async fn main() {
     // Set up the routes
@@ -35,10 +24,10 @@ async fn main() {
         .expect("Failed to bind to port 3000");
 
     // Start the server with a friendly message
-    println!("🚀 Solana HTTP Server is running!");
-    println!("📍 Server address: http://127.0.0.1:3000");
+    println!(" Solana HTTP Server is running!");
+    println!(" Server address: http://127.0.0.1:3000");
     println!();
-    println!("📋 Available endpoints:");
+    println!(" Available endpoints:");
     println!("  POST /keypair        - Generate a new Solana keypair");
     println!("  POST /token/create   - Create SPL token mint instruction");
     println!("  POST /token/mint     - Create mint tokens instruction");
