@@ -9,7 +9,7 @@ pub struct ApiResponse<T> {
 }
 
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct KeypairResponse {
     pub public_key: String,
     pub secret_key: String,
@@ -39,7 +39,7 @@ pub struct SignMessageRequest {
 }
 
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct SignMessageResponse {
     pub signature: String,
     pub public_key: String,
@@ -54,7 +54,7 @@ pub struct VerifyMessageRequest {
 }
 
 // Message verification response
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct VerifyMessageResponse {
     pub is_valid: bool,
     pub message: String,
@@ -79,7 +79,7 @@ pub struct SendTokenRequest {
 }
 
 // Account metadata for instructions
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct AccountInfo {
     pub public_key: String,
     pub is_signer: bool,
@@ -87,7 +87,7 @@ pub struct AccountInfo {
 }
 
 // Instruction data response
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct InstructionResponse {
     pub program_id: String,
     pub accounts: Vec<AccountInfo>,

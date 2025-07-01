@@ -1,6 +1,7 @@
 use axum::{extract::Json as ExtractJson, http::StatusCode, response::Json};
 use crate::types::{ApiResponse, SendSolRequest, SendTokenRequest, InstructionResponse, AccountInfo};
 use crate::utils::{parse_public_key, validate_amount};
+#[allow(deprecated)]
 use solana_sdk::system_instruction;
 use spl_token::instruction as token_instruction;
 use base64::{Engine as _, engine::general_purpose::STANDARD as BASE64_STANDARD};
