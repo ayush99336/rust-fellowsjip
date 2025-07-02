@@ -1,18 +1,32 @@
 [package]
-name = "solana-http-server"
+name = "rustserver"
 version = "0.1.0"
 edition = "2021"
-authors = ["Your Name <your.email@example.com>"]
-description = "A Solana HTTP server built with Rust"
 
 [dependencies]
-tokio = { version = "1.42", features = ["full"] }
-axum = { version = "0.8", features = ["json"] }
+# Web framework
+axum = "0.7"
+tokio = { version = "1.0", features = ["full"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors"] }
+
+# Serialization
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-solana-sdk = "2.3"
-solana-client = "2.3"
-spl-token = { version = "8.0", features = ["no-entrypoint"] }
-spl-associated-token-account = { version = "3.0", features = ["no-entrypoint"] }
-bs58 = "0.5.1"
-base64 = "0.22.1"
+
+# Solana dependencies (for instruction creation, no RPC)
+solana-sdk = "1.18"
+solana-program = "1.18"
+spl-token = "4.0"
+spl-associated-token-account = "2.3"
+
+# Cryptography
+ed25519-dalek = "1.0"
+rand = "0.7"
+bs58 = "0.5"
+base64 = "0.21"
+
+# Utilities
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
